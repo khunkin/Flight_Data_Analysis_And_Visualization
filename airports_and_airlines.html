@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Data Analysis of Airports and Airlines</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <script type="text/javascript" src="JavaScript_ECharts/echarts.js"></script>
+    <script type="text/javascript" src="JavaScript_ECharts/echarts-gl.js"></script>
+    <script type="text/javascript" src="JavaScripts/toCSV.js"></script>
+    <script type="text/javascript" src="JavaScripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="data/airlines.js"></script>
+    <script type="text/javascript" src="data/airports.js"></script>
+    <script type="text/javascript" src="data/planes.js"></script>
+    <script type="text/javascript" src="data/routes.js"></script>
+    <script type="text/javascript" src="JavaScripts/airports_and_airlines.js"></script>
+</head>
+<body>
+    <!-- 不太会读取JSON，用了取巧的方法：python生成一个var value = 'json string',然后直接当成变量用 -->
+    
+    <div style="text-align: center; line-height: 3em">
+        <span style="font-weight:bold;">
+            The combination of time zone and the number of airport<br> <br>
+        </span>
+    </div>
+    
+    <div id="main2" style="width: 1000px; height: 600px;margin-right: auto; margin-left: auto;">
+        <!-- 柱状图， 时区加数量 -->
+        <script>
+            var ports = JSON.parse(airports);
+            var tz = [];
+            for(i = 0; i < 26; i++){
+                tz.push(0);
+            }
+            
+            for(i = 0; i < ports.length; i++){
+                tz[parseInt(ports[i].Timezone)+12]++;
+            }
+            showTimezone(tz)
+        </script>
+        
+    </div>
+    
+
+    
+    
+    <div style="text-align: center; line-height: 3em">
+        <span style="font-weight:bold;">
+            The combination of the airports' Longitude, Aatitude and Altitude<br> <br>
+        </span>
+    </div>
+    
+    <div id="main1" style="width: 1000px; height: 600px;margin-right: auto; margin-left: auto;">
+        <!-- 经纬度加海拔 -->
+        <script>
+            var ports = JSON.parse(airports);
+            var axis = [];
+            var AltitudeColor = [];
+
+            var colo = ['3','4','5','6','7','8','9','a','b','c','d','e'];
+            for(i = 0; i < 12; i++){
+                for(j = 0; j < 12; j++){
+                    for(k = 0; k < 12; k++){
+                        AltitudeColor.push("#"+colo[i]+colo[j]+colo[k]);
+                    }
+                }
+            }
+
+            for(i = 0; i < ports.length; i++){
+                axis.push([ports[i].Longitude, ports[i].Latitude, ports[i].Altitude*0.3048]);
+            }
+            Longitude_Aatitude_Altitude(axis,AltitudeColor)
+        </script>
+    </div>
+
+
+
+
+
+
+    <div style="text-align: center; line-height: 3em">
+        <span style="font-weight:bold;">
+            The combination of the number of airlines, some countrys (or territory ) and activation <br> <br>
+        </span>
+    </div>
+
+    <div id="main3" style="width: 1000px; height: 600px;margin-right: auto; margin-left: auto;">
+        <!-- 经纬度加海拔 -->
+        <script>
+            var company = JSON.parse(airlines);
+            var country_airline_num = [];
+            var country_names = []
+            var y_num = [];
+            var n_num = [];
+
+            for(i = 0 ; i < company.length; i++){
+                if( company[i]["Country"] == null || company[i]["Country"]==""){
+                    continue;
+                }
+                if(country_airline_num[company[i]["Country"]] == null){
+                    country_airline_num[company[i]["Country"]] = {'Y':0, 'N':0};
+                }
+                if(company[i]["Active"] == 'Y') {
+                    country_airline_num[company[i]["Country"]]['Y'] += 1;
+                } else {
+                    country_airline_num[company[i]["Country"]]['N'] += 1;
+                }
+                country_names.push(company[i]["Country"]);
+            }
+
+            for(i = country_names.length - 1; i >= 0 ; i--){
+                for(j = 0; j < i; j++){
+                    if(country_names[j] > country_names[j+1]){
+                        var temp = country_names[j];
+                        country_names[j] = country_names[j+1];
+                        country_names[j+1] = temp;
+                    }
+                }
+            }
+            console.log(country_airline_num);
+            country_names = ["Argentina", "Australia","Brazil", "Canada", "China","Egypt", "France", "Germany" , "Greece", "Italy", "Japan","Mexico", "New Zealand", "Russia", "South Africa", "Spain","United Kingdom","United States"]
+
+            for(i = 0; i < country_names.length; i++){
+                y_num.push(country_airline_num[country_names[i]]['Y']);
+                n_num.push(-country_airline_num[country_names[i]]['N']);
+            }
+            var countryAndNum = [country_names, y_num, n_num] 
+
+            Airline_Country_Active(countryAndNum)
+        </script>
+
+    </div>
+
+</body>
+</html>

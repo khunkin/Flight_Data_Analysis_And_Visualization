@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>realtime</title>
+    <script type="text/javascript" src="JavaScripts/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="JavaScript_ECharts/echarts.js"></script>
+    <script type="text/javascript" src="JavaScript_ECharts/echarts-gl.js"></script>
+    <script type="text/javascript" src="JavaScripts/realtime.js"></script>
+    <script type="text/javascript" src="data/day_delay.js"></script>
+    <script type="text/javascript" src="data/every_day_delay.js"></script>
+    <script type="text/javascript" src="data/all_day_delay.js"></script>
+    <script type="text/javascript" src="data/company_delay.js"></script>
+    <script type="text/javascript" src="JavaScript_ECharts/vintage.js"></script>
+</head>
+<body>
+<div style="text-align: center; line-height: 3em">
+    <span style="font-weight:bold;">
+        PEK→CAN 航线数据分析<br> <br>
+    </span>
+</div>
+
+
+<div id="main1" style="width: 1000px; height: 600px;margin-right: auto; margin-left: auto;">
+    <script>
+        c_delay (company_delay);
+    </script>
+</div>
+
+
+<div style="text-align: center; line-height: 3em">
+    <span style="font-weight:bold;">
+        <br> <br>8.23~9.07各公司航班延误情况
+    </span>
+</div>
+<div id="main2" style="width: 1000px; height: 600px;margin-right: auto; margin-left: auto;">
+    <script>
+        data = JSON.parse(day_delay);
+        d_delay (data);
+    </script>
+</div>
+
+
+<div style="text-align: center; line-height: 3em">
+    <span style="font-weight:bold;">
+        <br> <br>8.23~9.07各时间段内航班延总误数
+    </span>
+</div>
+<div id="main3" style="width: 1000px; height: 600px;margin-right: auto; margin-left: auto;">
+    <script>
+        a_delay(all_day_delay);
+    </script>
+</div>
+
+
+<div style="text-align: center; line-height: 3em">
+    <span style="font-weight:bold;">
+        <br> <br>8.23~9.07各时间段内航班延误数
+    </span>
+</div>
+<div id="main4" style="width: 1000px; height: 600px;margin-right: auto; margin-left: auto;">
+    <script>
+        data = JSON.parse(every_day_delay);
+        e_delay (data);
+    </script>
+</div>
+
+
+
+</body>
+
+</html>
